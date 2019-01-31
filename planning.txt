@@ -1,0 +1,38 @@
+This will be a Python RPG following a self-made character who goes
+through rooms in a dungeon and fights a number of encounters until he dies.
+You can also go above-ground and shop at stores to buy stuff with rewards you 
+get from fighting monsters and getting loot. You can fight, use items, and level up.
+
+Nouns:
+- RPG
+- character
+- dungeon
+- rooms
+- stores
+- above-ground
+- reward/loot
+- monsters
+- encounters
+
+Verbs:
+- make character
+- fighting
+- buy
+- get rewards
+- get loot
+- go through rooms
+
+
+Class Heirarchy:
+- Entity
+    - player
+    - monster
+- Encounters
+    - Social
+    - Combat
+    - Shop
+- Map
+    - next-room
+    - start-room
+- Engine
+    
