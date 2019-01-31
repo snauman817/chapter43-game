@@ -25,14 +25,21 @@ Verbs:
 
 Class Heirarchy:
 - Entity
-    - player
-    - monster
+    - fight
+    - health
+    - defense
+    - weapon
+    * Player
+        - choices in fighting
+        - inventory
+    * Monster
 - Encounters
-    - Social
-    - Combat
-    - Shop
+    - enter
+    * Social
+    * Combat
+    * Shop
 - Map
-    - next-room
-    - start-room
+    - next-encounter
+    - start-encounter
 - Engine
-    
+    - play
