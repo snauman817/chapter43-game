@@ -28,6 +28,7 @@ Class Heirarchy:
     - fight
     - health
     - defense
+    - attack
     - weapon
     * Player
         - choices in fighting
