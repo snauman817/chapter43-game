@@ -1,4 +1,5 @@
 from sys import exit
+import players
 
 map_idea = """
     (0, 0)      (0, 1)      (0, 2)
@@ -14,11 +15,39 @@ map_idea = """
     (1, 0)      (1, 1)      (1, 2)
 """
 
+class Scene(object):
+    
+    def enter(self):
+        pass
+
+class Death(Scene):
+
+    def enter(self):
+        print("You have died.")
+        exit(0)
+
+class Shop(Scene):
+
+    catalog = [
+        players.Weapon("Wooden Sword", "The most basic of the swords", 1),
+        players.Potion("Health Potion", "Heals 5 HP.")
+    ]
+
+    def enter(self):
+        print("Welcome to the shop!")
+        print("1. Buy")
+        print("2. Sell")
+
+        choice = input("> ")
+
+        if choice == 1:
+            print("catalog")
 
 class Map(object):
 
     scenes = {
-        'death' : 'death',
+        'death' : Death(),
+        'shop' : Shop(),
         'floor1' : {
             (0, 0) : None, (0, 1) : None, (0, 2) : None,
             (1, 0) : None, (1, 1) : None, (1, 2) : None
@@ -26,8 +55,6 @@ class Map(object):
         'floor2' : {
 
         }
-        
-
     }
 
     def __init__(self, start_scene):
@@ -38,22 +65,4 @@ class Map(object):
     
     def opening_scene(self):
         return self.next_scene(self.start_scene)
-
-class Scene(object):
-
-    def __init__(self):
-        pass
-    
-    def enter(self):
-        pass
-
-class Death(Scene):
-
-    def __init__(self):
-        super(Death, self).__init__()
-
-    def enter(self):
-        print("You have died.")
-        exit(0)
-
     
