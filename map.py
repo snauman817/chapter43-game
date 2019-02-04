@@ -40,6 +40,8 @@ class Shop(Scene):
 
         player.get_item(item)
 
+        self.catalog.remove(item)
+
     def enter(self, player):
         print("Welcome to the shop!")
         print("1. Buy")
@@ -71,25 +73,23 @@ class Shop(Scene):
 
 class Map(object):
 
-    player = players.create_player()
-
-    scenes = {
-        'death' : Death(),
-        'shop' : Shop(),
-        'floor1' : {
-            (0, 0) : None, (0, 1) : None, (0, 2) : None,
-            (1, 0) : None, (1, 1) : None, (1, 2) : None
-        },
-        'floor2' : {
-
-        }
-    }
-
     def __init__(self, start_scene):
         self.start_scene = start_scene
+        self.scenes = {
+            'death' : Death(),
+            'shop' : Shop(),
+            'floor1' : {
+                (0, 0) : None, (0, 1) : None, (0, 2) : None,
+                (1, 0) : None, (1, 1) : None, (1, 2) : None
+            },
+            'floor2' : {
+
+            }
+        }
+        self.player = players.create_player()
 
     def next_scene(self, scene_name):
-        return Map.scenes.get(scene_name)
+        return self.scenes.get(scene_name)
     
     def opening_scene(self):
         return self.next_scene(self.start_scene)
