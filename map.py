@@ -17,33 +17,61 @@ map_idea = """
 
 class Scene(object):
     
-    def enter(self):
+    def enter(self, player):
         pass
 
 class Death(Scene):
 
-    def enter(self):
+    def enter(self, player):
         print("You have died.")
         exit(0)
 
 class Shop(Scene):
 
-    catalog = [
-        players.Weapon("Wooden Sword", "The most basic of the swords", 1),
-        players.Potion("Health Potion", "Heals 5 HP.", 5)
-    ]
+    def __init__(self):
+        self.catalog = [
+            players.Weapon("Wooden Sword", "The most basic of the swords", 1),
+            players.Potion("Health Potion", "Heals 5 HP.", 5)
+        ]
 
-    def enter(self):
+    def buy(self, player, item_no):
+        item = self.catalog[item_no]
+        print(item.name)
+
+        player.get_item(item)
+
+    def enter(self, player):
         print("Welcome to the shop!")
         print("1. Buy")
         print("2. Sell")
+        print("3. Leave")
 
-        choice = input("> ")
+        choice = int(input("> "))
 
         if choice == 1:
-            print("catalog")
+            count = 1
+            for item in self.catalog:
+                print(f"{count}. {item.name}")
+                count += 1
+            print(f"{count}. Back")
+
+            item_to_buy = int(input("> "))
+            if item_to_buy == len(self.catalog) + 1:
+                self.enter(player)
+            else:
+                self.buy(player, item_to_buy - 1)
+                self.enter(player)
+        elif choice == 2:
+            print("This function will be added later.")
+            self.enter(player)
+        else:
+            print("Good seeing you!")
+            # just a placeholder for now
+            return 'death'
 
 class Map(object):
+
+    player = players.create_player()
 
     scenes = {
         'death' : Death(),

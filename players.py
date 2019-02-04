@@ -28,6 +28,7 @@ class Player(Character):
         count = 1
         for item in self.inventory:
             print(f"{count}. {item.name}")
+            count += 1
         print(f"{count + 1}. Back")
 
         choice = input("> ")
@@ -176,11 +177,23 @@ def combat(player, enemy):
     print(f"{enemy.name} has been defeated!")
     player.gain_xp(enemy.xp)
 
+def create_player():
+    print("Tell me your name.")
+
+    choice = input("> ")
+
+    print(f"Good, then your name is {choice}")
+    print("Get ready to embark on an epic journey!")
+
+    print(" ")
+    print("-" * 10)
+    print(" ")
+
+    sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
+    return Player(choice, 2, 0, 10, sword, 1, 0)
+
 sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
 fist = Weapon("Fists", "Just a fist", 0)
 p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
 potion = Potion("Health Potion", "Heals 5 HP", 5)
 p1.get_item(potion)
-e1 = Enemy("Slime", 1, 0, 4, fist, 150)
-
-combat(p1, e1)
