@@ -30,7 +30,7 @@ class Shop(Scene):
 
     catalog = [
         players.Weapon("Wooden Sword", "The most basic of the swords", 1),
-        players.Potion("Health Potion", "Heals 5 HP.")
+        players.Potion("Health Potion", "Heals 5 HP.", 5)
     ]
 
     def enter(self):

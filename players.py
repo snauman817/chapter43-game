@@ -117,12 +117,13 @@ class Weapon(Item):
 
 class Potion(Item):
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, restoration):
         super(Potion, self).__init__(name, description)
+        self.restoration = restoration
 
     def use(self, player):
-        print("You gained 5 HP.")
-        player.hp += 5
+        print(f"You gained {self.restoration} HP.")
+        player.hp += self.restoration
         
         if player.max_hp < player.hp:
             player.hp = player.max_hp
@@ -178,7 +179,7 @@ def combat(player, enemy):
 sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
 fist = Weapon("Fists", "Just a fist", 0)
 p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
-potion = Potion("Health Potion", "Heals 5 HP")
+potion = Potion("Health Potion", "Heals 5 HP", 5)
 p1.get_item(potion)
 e1 = Enemy("Slime", 1, 0, 4, fist, 150)
 
