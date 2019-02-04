@@ -1,5 +1,6 @@
+from sys import exit
 
-"""
+map_idea = """
     (0, 0)      (0, 1)      (0, 2)
     _________________________________
     |          |          |          |
@@ -23,7 +24,7 @@ class Map(object):
             (1, 0) : None, (1, 1) : None, (1, 2) : None
         },
         'floor2' : {
-            
+
         }
         
 
@@ -37,5 +38,22 @@ class Map(object):
     
     def opening_scene(self):
         return self.next_scene(self.start_scene)
+
+class Scene(object):
+
+    def __init__(self):
+        pass
+    
+    def enter(self):
+        pass
+
+class Death(Scene):
+
+    def __init__(self):
+        super(Death, self).__init__()
+
+    def enter(self):
+        print("You have died.")
+        exit(0)
 
     

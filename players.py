@@ -19,18 +19,29 @@ class Player(Character):
         self.level = 1
         self.xp = 0
 
+    # adds an item to the inventory
+    def get_item(self, item):
+        self.inventory.append(item)
+
+    # allows you to select an item from the inventory to use
     def item_selection(self):
         count = 1
         for item in self.inventory:
             print(f"{count}. {item.name}")
+        print(f"{count + 1}. Back")
 
         choice = input("> ")
 
-        int_input = int(choice[2])
+        int_input = int(choice)
         if int_input <= len(self.inventory) and int_input != 0:
             item = self.inventory[int_input - 1]
             item.use(self)
-
+        # this else if is still buggy
+        elif int_input == len(self.inventory) + 1:
+            pass
+        else:
+            print("I do not understand.")
+            self.item_selection()
 
     def combat_choice(self):
         print(" ")
@@ -104,18 +115,23 @@ class Weapon(Item):
         super(Weapon, self).__init__(name, description)
         self.damage = damage
 
-# class Potion(Item):
+class Potion(Item):
 
-#     def __init__(self, function, description):
-#         super(Potion, self).__init__(function, description)
+    def __init__(self, name, description):
+        super(Potion, self).__init__(name, description)
 
-#     def consume(self, player):
-#         player.hp += self.function
+    def use(self, player):
+        print("You gained 5 HP.")
+        player.hp += 5
+        
+        if player.max_hp < player.hp:
+            player.hp = player.max_hp
 
+        player.inventory.remove(self)
 
 def attack(attacker, defender):
 
-    damage = attacker.attack
+    damage = attacker.attack + attacker.held_item.damage
     
     if damage > defender.defense:
         defender.hp -= damage
@@ -154,13 +170,16 @@ def combat(player, enemy):
 
             if player.hp <= 0:
                 print(f"You died in battle to {enemy.name}")
+                exit(0)
     
     print(f"{enemy.name} has been defeated!")
     player.gain_xp(enemy.xp)
 
 sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
-fist = Weapon("Fists", "Just a fist", 0)   
+fist = Weapon("Fists", "Just a fist", 0)
 p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
+potion = Potion("Health Potion", "Heals 5 HP")
+p1.get_item(potion)
 e1 = Enemy("Slime", 1, 0, 4, fist, 150)
 
 combat(p1, e1)
