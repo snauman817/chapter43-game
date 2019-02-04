@@ -14,14 +14,23 @@ class Character(object):
 class Player(Character):
 
     def __init__(self, name, attack, defense, hp, held_item, level, xp):
-        super(Player, self).__init__(attack, name, defense, hp, held_item)
-        self.inventory = {'1' : None, '2' : None, '3' : None}
+        super(Player, self).__init__(name, attack, defense, hp, held_item)
+        self.inventory = []
         self.level = 1
         self.xp = 0
 
-    def use_item(self, item):
-        if item in self.inventory:
-            self.inventory.pop(item)
+    def item_selection(self):
+        count = 1
+        for item in self.inventory:
+            print(f"{count}. {item.name}")
+
+        choice = input("> ")
+
+        int_input = int(choice[2])
+        if int_input <= len(self.inventory) and int_input != 0:
+            item = self.inventory[int_input - 1]
+            item.use(self)
+
 
     def combat_choice(self):
         print(" ")
@@ -39,6 +48,7 @@ class Player(Character):
             self.combat_choice()
     
     def gain_xp(self, reward_xp):
+        print(f"You gained {reward_xp} xp!")
         self.xp += reward_xp
         if self.xp >= 100:
             self.level_up()
@@ -75,19 +85,23 @@ class Player(Character):
 class Enemy(Character):
 
     def __init__(self, name, attack, defense, hp, held_item, xp):
-        super(Enemy, self).__init__(attack, name, defense, hp, held_item)
+        super(Enemy, self).__init__(name, attack, defense, hp, held_item)
         self.xp = xp
 
 class Item(object):
 
-    def __init__(self, function, description):
-        self.function = function
+    def __init__(self, name, description):
+        self.name = name
         self.description = description
+    
+    def use(self, player):
+        print("Use item and remove it from player inventory.")
+        
 
 class Weapon(Item):
 
-    def __init__(self, function, description, damage):
-        super(Weapon, self).__init__(function, description)
+    def __init__(self, name, description, damage):
+        super(Weapon, self).__init__(name, description)
         self.damage = damage
 
 # class Potion(Item):
@@ -100,13 +114,14 @@ class Weapon(Item):
 
 
 def attack(attacker, defender):
+
     damage = attacker.attack
     
     if damage > defender.defense:
         defender.hp -= damage
-        print(f"You dealt {damage} damage.")
+        return damage
     else:
-        print("You dealt no damage.")
+        return 0
 
 def check_death(defender):
     if defender.hp <= 0:
@@ -124,23 +139,28 @@ def combat(player, enemy):
 
         choice = player.combat_choice()
 
+        print(" ")
+
         if choice == 1:
-            attack(player, enemy)
+            damage = attack(player, enemy)
+            print(f"You dealt {damage} damage.")
         else:
-            print("Use item")
+            player.item_selection()
         
         if enemy.hp > 0:
             print(f"{enemy.name} attacks.")
-            attack(enemy, player)
+            enemy_damage = attack(enemy, player)
+            print(f"{enemy.name} did {enemy_damage} damage.")
 
             if player.hp <= 0:
                 print(f"You died in battle to {enemy.name}")
     
+    print(f"{enemy.name} has been defeated!")
     player.gain_xp(enemy.xp)
 
-sword = Weapon("do thing", "A standard wooden sword", 1)
-fist = Weapon("punch person", "Just a fist", 0)   
+sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
+fist = Weapon("Fists", "Just a fist", 0)   
 p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
-e1 = Enemy("Slime", 1, 0, 4, fist, 30)
+e1 = Enemy("Slime", 1, 0, 4, fist, 150)
 
 combat(p1, e1)
