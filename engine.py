@@ -14,6 +14,6 @@ class Engine(object):
             next_scene_name = current_scene.enter(self.scene_map.player)
             current_scene = self.scene_map.next_scene(next_scene_name)
 
-map1 = map.Map('shop')
+map1 = map.Map('slime room')
 engine1 = Engine(map1)
 engine1.play()
