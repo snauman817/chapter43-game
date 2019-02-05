@@ -120,7 +120,7 @@ class SlimeRoom(DungeonRoom):
             players.combat(player, slime)
 
             print("You found 30 gold in the slime's remains.")
-            # add gold with some sort of function
+            player.get_gold(30)
 
             self.cleared = True
         
@@ -189,4 +189,3 @@ class Map(object):
     
     def opening_scene(self):
         return self.next_scene(self.start_scene)
-    

@@ -18,6 +18,7 @@ class Player(Character):
         self.inventory = []
         self.level = 1
         self.xp = 0
+        self.gold = 0
 
     # adds an item to the inventory
     def get_item(self, item):
@@ -43,6 +44,9 @@ class Player(Character):
         else:
             print("I do not understand.")
             self.item_selection()
+
+    def get_gold(self, amount):
+        self.gold += amount
 
     def combat_choice(self):
         print(" ")
