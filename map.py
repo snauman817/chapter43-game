@@ -30,17 +30,20 @@ class Shop(Scene):
 
     def __init__(self):
         self.catalog = [
-            players.Weapon("Wooden Sword", "The most basic of the swords", 1),
-            players.Potion("Health Potion", "Heals 5 HP.", 5)
+            players.Weapon("Iron Sword", "The most basic of the swords", 70, 4),
+            players.Potion("Health Potion", "Heals 5 HP.", 50, 5),
+            players.Potion("Health Potion", "Heals 5 HP.", 50, 5)
         ]
 
     def buy(self, player, item_no):
         item = self.catalog[item_no]
-        print(f"You bought the {item.name}")
-
-        player.get_item(item)
-
-        self.catalog.remove(item)
+        if player.gold >= item.price:
+            print(f"You bought the {item.name} for {item.price} gold.")
+            player.get_item(item)
+            player.gold -= item.price
+            self.catalog.remove(item)
+        else:
+            print("You do not have enough gold to purchase this item.")
 
     def enter(self, player):
         print("Welcome to the shop!")
@@ -54,7 +57,7 @@ class Shop(Scene):
             print("What would you like to buy?")
             count = 1
             for item in self.catalog:
-                print(f"{count}. {item.name}")
+                print(f"{count}. {item.name} ({item.price} gold)")
                 count += 1
             print(f"{count}. Back")
 
@@ -67,10 +70,9 @@ class Shop(Scene):
         elif choice == 2:
             print("This function will be added later.")
             self.enter(player)
-        else:
+        elif choice == 3:
             print("Good seeing you!")
-            # just a placeholder for now
-            return 'death'
+            return 'slime room'
 
 class DungeonRoom(Scene):
 
@@ -115,13 +117,73 @@ class SlimeRoom(DungeonRoom):
         if not self.cleared:
             print("This room has only a slime, but it wants to fight.")
 
-            slime = players.Enemy("Slime", 1, 0, 4, players.fist, 30)
+            slime = players.Enemy("Slime", 1, 0, 4, players.fist, 60)
 
             players.combat(player, slime)
 
             print("You found 30 gold in the slime's remains.")
             player.get_gold(30)
 
+            self.cleared = True
+        
+        return self.next_room_option()
+
+class TrogRoom(DungeonRoom):
+
+    def __init__(self, name, other_rooms):
+        super(TrogRoom, self).__init__(name, other_rooms)
+
+    def enter(self, player):
+        if not self.cleared:
+            print("A troglodyte, previously blended into the wall, appears and tries to attack you.")
+
+            trog = players.Enemy("Troglodyte", 1, 1, 4, players.fist, 0)
+
+            players.combat(player, trog)
+
+            print("You found 40 gold on the trog's body.")
+            player.get_gold(40)
+
+            self.cleared = True
+        
+        return self.next_room_option()
+
+class ChestRoom(DungeonRoom):
+
+    def __init__(self, name, other_rooms):
+        super(ChestRoom, self).__init__(name, other_rooms)
+
+    def enter(self, player):
+        if not self.cleared:
+            print("You see a chest in the middle of the room.")
+            
+            print("1. Open the chest")
+            print("2. Leave the room")
+
+            choice = int(input("> "))
+
+            if choice == 1:
+                print("You open the chest and get one health potion!")
+                player.get_item(players.Potion("Health Potion", "Heals 5 HP.", 50, 5))
+                self.cleared = True
+        
+        return self.next_room_option()
+
+class VampireRoom(DungeonRoom):
+
+    def __init__(self, name, other_rooms):
+        super(VampireRoom, self).__init__(name, other_rooms)
+
+    def enter(self, player):
+        if not self.cleared:
+            print("A vampire stands in your way.")
+
+            vampire = players.Enemy('Vampire', 3, 1, 10, players.fist, 40)
+            players.combat(player, vampire)
+            
+            print("You got 70 gold!")
+            player.get_gold(70)
+            
             self.cleared = True
         
         return self.next_room_option()
@@ -133,7 +195,10 @@ class Map(object):
         self.scenes = {
             'death' : Death(),
             'shop' : Shop(),
-            'slime room' : SlimeRoom('slime room', ['death', 'shop']),
+            'slime room' : SlimeRoom('slime room', ['shop', 'trog room']),
+            'trog room' : TrogRoom('trog room', ['slime room', 'chest room', 'vampire room']),
+            'chest room' : ChestRoom('chest room', ['trog room']),
+            'vampire room' : VampireRoom('vampire room', ['trog room']),
             'floor1' : {
                 (0, 0) : {
                     'room options' : [(0, 1), (1, 0)], 

@@ -27,10 +27,13 @@ class Player(Character):
     # allows you to select an item from the inventory to use
     def item_selection(self):
         count = 1
-        for item in self.inventory:
-            print(f"{count}. {item.name}")
-            count += 1
-        print(f"{count + 1}. Back")
+        if len(self.inventory) > 0:
+            for item in self.inventory:
+                print(f"{count}. {item.name}")
+                count += 1
+            print(f"{count + 1}. Back")
+        else:
+            print(f"{count}. Back")
 
         choice = input("> ")
 
@@ -106,24 +109,24 @@ class Enemy(Character):
 
 class Item(object):
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, price):
+        self.price = price
         self.name = name
         self.description = description
     
     def use(self, player):
         print("Use item and remove it from player inventory.")
-        
 
 class Weapon(Item):
 
-    def __init__(self, name, description, damage):
-        super(Weapon, self).__init__(name, description)
+    def __init__(self, name, description, price, damage):
+        super(Weapon, self).__init__(name, description, price)
         self.damage = damage
 
 class Potion(Item):
 
-    def __init__(self, name, description, restoration):
-        super(Potion, self).__init__(name, description)
+    def __init__(self, name, description, price, restoration):
+        super(Potion, self).__init__(name, description, price)
         self.restoration = restoration
 
     def use(self, player):
@@ -193,11 +196,11 @@ def create_player():
     print("-" * 10)
     print(" ")
 
-    sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
+    sword = Weapon("Wooden Sword", "A standard wooden sword", 5, 1)
     return Player(choice, 2, 0, 10, sword, 1, 0)
 
-sword = Weapon("Wooden Sword", "A standard wooden sword", 1)
-fist = Weapon("Fists", "Just a fist", 0)
+sword = Weapon("Wooden Sword", "A standard wooden sword", 5, 1)
+fist = Weapon("Fists", "Just a fist", 0, 0)
 p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
-potion = Potion("Health Potion", "Heals 5 HP", 5)
+potion = Potion("Health Potion", "Heals 5 HP", 50, 5)
 p1.get_item(potion)
