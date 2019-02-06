@@ -188,6 +188,44 @@ class VampireRoom(DungeonRoom):
         
         return self.next_room_option()
 
+class BeholderRoom(DungeonRoom):
+
+    def __init__(self, name, other_rooms):
+        super(BeholderRoom, self).__init__(name, other_rooms)
+
+    def enter(self, player):
+        if not self.cleared:
+            print("In front of you now floats a Beholder, a giant one-eyed creature with many eyestalks coming out of the ball of flesh that is its body.")
+
+            beholder = players.Enemy('Beholder', 4, 3, 20, players.Weapon('Mind Beam', 'A psychic look', 100, 2), 100)
+            players.combat(player, beholder)
+
+            print("You got 100 gold!")
+            player.get_gold(100)
+
+            self.cleared = True
+        
+        return self.next_room_option()
+
+class TiamatRoom(DungeonRoom):
+
+    def __init__(self, name, other_rooms):
+        super(TiamatRoom, self).__init__(name, other_rooms)
+
+    def enter(self, player):
+        if not self.cleared:
+            print("The evil dragon god Tiamat lies before you. This is the true final boss.")
+
+            tiamat = players.Enemy('Tiamat', 6, 3, 20, players.Weapon('Bite', 'A bite with Tiamat\'s jaw.', 10000, 3), 100)
+            players.combat(player, tiamat)
+
+            print("You got 300 gold!")
+            player.get_gold(100)
+
+            self.cleared = True
+
+        return self.next_room_option()
+
 class Map(object):
 
     def __init__(self, start_scene):
@@ -198,54 +236,9 @@ class Map(object):
             'slime room' : SlimeRoom('slime room', ['shop', 'trog room']),
             'trog room' : TrogRoom('trog room', ['slime room', 'chest room', 'vampire room']),
             'chest room' : ChestRoom('chest room', ['trog room']),
-            'vampire room' : VampireRoom('vampire room', ['trog room']),
-            'floor1' : {
-                (0, 0) : {
-                    'room options' : [(0, 1), (1, 0)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                },
-                (0, 1) : {
-                    'room options' : [(0, 0), (0, 2), (1, 1)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                },
-                (0, 2) : {
-                    'room options' : [(0, 1), (1, 2)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                },
-                (1, 0) : {
-                    'room options' : [(0, 0), (1, 1)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                },
-                (1, 1) : {
-                    'room options' : [(1, 0), (1, 2), (0, 1)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                },
-                (1, 2) : {
-                    'room options' : [(1, 1), (0, 2)], 
-                    'cleared' : False, 
-                    'encounter' : None,
-                    'entrance' : False,
-                    'exit' : False
-                }
-            },
-            'floor2' : {
-
-            }
+            'vampire room' : VampireRoom('vampire room', ['beholder room', 'trog room']),
+            'beholder room' : BeholderRoom('beholder room', ['vampire room']),
+            'tiamat room' : TiamatRoom('tiamat room', ['beholder room', 'finished'])
         }
         self.player = players.create_player()
 
