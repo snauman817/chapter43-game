@@ -196,11 +196,12 @@ def create_player():
     print("-" * 10)
     print(" ")
 
-    sword = Weapon("Wooden Sword", "A standard wooden sword", 5, 1)
-    return Player(choice, 2, 0, 10, sword, 1, 0)
+    if choice == 'Spencer':
+        sword = Weapon("Debug Sword", "This is broken", 100, 20)
+        return Player(choice, 10, 10, 10, sword, 1, 0)
+    else:
+        sword = Weapon("Wooden Sword", "A standard wooden sword", 5, 1)
+        return Player(choice, 2, 0, 10, sword, 1, 0)
 
 sword = Weapon("Wooden Sword", "A standard wooden sword", 5, 1)
 fist = Weapon("Fists", "Just a fist", 0, 0)
-p1 = Player("Jacob", 2, 0, 10, sword, 1, 0)
-potion = Potion("Health Potion", "Heals 5 HP", 50, 5)
-p1.get_item(potion)

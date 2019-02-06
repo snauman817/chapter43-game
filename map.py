@@ -222,6 +222,8 @@ class TiamatRoom(DungeonRoom):
             print("You got 300 gold!")
             player.get_gold(100)
 
+            print("Congratulations!")
+
             self.cleared = True
 
         return self.next_room_option()
@@ -237,7 +239,7 @@ class Map(object):
             'trog room' : TrogRoom('trog room', ['slime room', 'chest room', 'vampire room']),
             'chest room' : ChestRoom('chest room', ['trog room']),
             'vampire room' : VampireRoom('vampire room', ['beholder room', 'trog room']),
-            'beholder room' : BeholderRoom('beholder room', ['vampire room']),
+            'beholder room' : BeholderRoom('beholder room', ['vampire room', 'tiamat room']),
             'tiamat room' : TiamatRoom('tiamat room', ['beholder room', 'finished'])
         }
         self.player = players.create_player()
